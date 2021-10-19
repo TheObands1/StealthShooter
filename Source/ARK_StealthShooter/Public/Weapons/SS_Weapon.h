@@ -14,9 +14,22 @@ class ARK_STEALTHSHOOTER_API ASS_Weapon : public AActor
 	GENERATED_BODY()
 
 protected:
+
+	UPROPERTY(EditDefaultsOnly)
+	bool bIsDebugging;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* WeaponMesh;
-	
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Settings")
+	float ShotDistance;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Settings")
+	float ShotDamage;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageType> DamageType;
 public:	
 	// Sets default values for this actor's properties
 	ASS_Weapon();
@@ -28,5 +41,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void Fire();
 
 };

@@ -14,6 +14,14 @@ ASS_BaseCharacter::ASS_BaseCharacter()
 
 }
 
+void ASS_BaseCharacter::StartFire()
+{
+	if (IsValid(CurrentWeapon))
+	{
+		CurrentWeapon->Fire();
+	}
+}
+
 // Called when the game starts or when spawned
 void ASS_BaseCharacter::BeginPlay()
 {
@@ -23,6 +31,7 @@ void ASS_BaseCharacter::BeginPlay()
 		CurrentWeapon = GetWorld()->SpawnActor<ASS_Weapon>(StartingWeaponClass, FVector::ZeroVector, FRotator::ZeroRotator);
 		if (IsValid(CurrentWeapon))
 		{
+			CurrentWeapon->SetOwner(this);
 			CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocketName);
 		}
 	}

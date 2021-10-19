@@ -26,6 +26,20 @@ void ASS_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &ASS_PlayerCharacter::StartCrouch);
 	PlayerInputComponent->BindAction("EndCrouch", IE_Released, this, &ASS_PlayerCharacter::EndCrouch);
 
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ASS_PlayerCharacter::StartFire);
+
+}
+
+FVector ASS_PlayerCharacter::GetPawnViewLocation() const
+{
+	if (IsValid(CameraComponent))
+	{
+		return CameraComponent->GetComponentLocation();
+	}
+	else
+	{
+		return Super::GetPawnViewLocation();
+	}
 }
 
 void ASS_PlayerCharacter::MoveFoward(float AxisValue)
