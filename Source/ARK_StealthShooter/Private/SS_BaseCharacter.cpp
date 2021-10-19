@@ -3,6 +3,7 @@
 
 #include "SS_BaseCharacter.h"
 #include "GameFramework/PawnMovementComponent.h"
+#include "Weapons/SS_Weapon.h"
 
 // Sets default values
 ASS_BaseCharacter::ASS_BaseCharacter()
@@ -17,14 +18,16 @@ ASS_BaseCharacter::ASS_BaseCharacter()
 void ASS_BaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	if (IsValid(StartingWeaponClass))
+	{
+		CurrentWeapon = GetWorld()->SpawnActor<ASS_Weapon>(StartingWeaponClass, FVector::ZeroVector, FRotator::ZeroRotator);
+		if (IsValid(CurrentWeapon))
+		{
+			CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocketName);
+		}
+	}
 	
 }
 
-// Called every frame
-void ASS_BaseCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
 
 
