@@ -4,6 +4,7 @@
 #include "SS_BaseCharacter.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Weapons/SS_Weapon.h"
+#include "SS_HealthComponent.h"
 
 // Sets default values
 ASS_BaseCharacter::ASS_BaseCharacter()
@@ -12,13 +13,23 @@ ASS_BaseCharacter::ASS_BaseCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	GetMovementComponent()->GetNavAgentPropertiesRef().bCanCrouch = true;
 
+	HealthComponent = CreateDefaultSubobject<USS_HealthComponent>(TEXT("HealthComponent"));
+
 }
 
 void ASS_BaseCharacter::StartFire()
 {
 	if (IsValid(CurrentWeapon))
 	{
-		CurrentWeapon->Fire();
+		CurrentWeapon->StartFire();
+	}
+}
+
+void ASS_BaseCharacter::StopFire()
+{
+	if (IsValid(CurrentWeapon))
+	{
+		CurrentWeapon->StopFire();
 	}
 }
 
@@ -36,6 +47,22 @@ void ASS_BaseCharacter::BeginPlay()
 		}
 	}
 	
+	if (IsValid(HealthComponent))
+	{
+		HealthComponent->OnHealthChangedDelegate.AddDynamic(this, &ASS_BaseCharacter::OnHealthChanged);
+		HealthComponent->OnDeathDelegate.AddDynamic(this, &ASS_BaseCharacter::OnDeath);
+	}
+}
+
+void ASS_BaseCharacter::OnHealthChanged(USS_HealthComponent* MyHealthComponent, float Health, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+{
+}
+
+void ASS_BaseCharacter::OnDeath(USS_HealthComponent* MyHealthComponent, AController* InstigatedBy, AActor* Killer)
+{
+	StopFire();
+	GetMovementComponent()->StopMovementImmediately();
+	this->SetActorEnableCollision(false);
 }
 
 

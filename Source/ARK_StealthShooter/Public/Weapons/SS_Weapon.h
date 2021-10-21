@@ -22,14 +22,24 @@ protected:
 	UStaticMeshComponent* WeaponMesh;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Settings")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Settings", meta = (ClampMin = 0.1f))
 	float ShotDistance;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Settings")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Settings", meta = (ClampMin = 0.0f))
 	float ShotDamage;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Settings", meta = (ClampMin = 0.1f))
+	float RoundsPerMinute;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Settings", meta = (ClampMin = 0.1f))
+	float TimeBetweenShots;
+
+	float LastFireTime;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageType> DamageType;
+
+	FTimerHandle TimerHandle_AutoFire;
 public:	
 	// Sets default values for this actor's properties
 	ASS_Weapon();
@@ -41,6 +51,10 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void StartFire();
+
+	void StopFire();
 
 	void Fire();
 

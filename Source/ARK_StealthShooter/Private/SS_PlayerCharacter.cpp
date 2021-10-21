@@ -27,6 +27,7 @@ void ASS_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	PlayerInputComponent->BindAction("EndCrouch", IE_Released, this, &ASS_PlayerCharacter::EndCrouch);
 
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ASS_PlayerCharacter::StartFire);
+	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ASS_PlayerCharacter::StopFire);
 
 }
 

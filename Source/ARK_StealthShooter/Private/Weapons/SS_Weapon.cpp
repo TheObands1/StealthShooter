@@ -20,6 +20,7 @@ ASS_Weapon::ASS_Weapon()
 	ShotDamage = 20.0f;
 
 	bIsDebugging = false;
+	RoundsPerMinute = 300;
 
 }
 
@@ -27,7 +28,7 @@ ASS_Weapon::ASS_Weapon()
 void ASS_Weapon::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	TimeBetweenShots = 60 / RoundsPerMinute;
 }
 
 // Called every frame
@@ -35,6 +36,20 @@ void ASS_Weapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ASS_Weapon::StartFire()
+{
+	float TimeToCalculate = LastFireTime + TimeBetweenShots;
+	float CurrentSeconds = GetWorld()->TimeSeconds;
+	float MaxValueOfDelay = TimeToCalculate - CurrentSeconds;
+	float FirstDelay = FMath::Max(0.0f, MaxValueOfDelay);
+	GetWorldTimerManager().SetTimer(TimerHandle_AutoFire, this, &ASS_Weapon::Fire, TimeBetweenShots, true, FirstDelay);
+}
+
+void ASS_Weapon::StopFire()
+{
+	GetWorldTimerManager().ClearTimer(TimerHandle_AutoFire);
 }
 
 void ASS_Weapon::Fire()
@@ -72,5 +87,6 @@ void ASS_Weapon::Fire()
 		}
 
 	}
+	LastFireTime = GetWorld()->TimeSeconds;
 }
 
