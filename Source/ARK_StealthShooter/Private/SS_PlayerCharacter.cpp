@@ -29,6 +29,8 @@ void ASS_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ASS_PlayerCharacter::StartFire);
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ASS_PlayerCharacter::StopFire);
 
+	PlayerInputComponent->BindAction("Melee", IE_Pressed, this, &ASS_PlayerCharacter::StartMelee);
+
 }
 
 FVector ASS_PlayerCharacter::GetPawnViewLocation() const

@@ -7,6 +7,7 @@
 #include "../ARK_StealthShooter.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 ASS_Weapon::ASS_Weapon()
@@ -80,9 +81,35 @@ void ASS_Weapon::Fire()
 
 			UGameplayStatics::ApplyPointDamage(HitActor, ShotDamage, ShotDirection, Hit, MyOwner->GetInstigatorController(), MyOwner, DamageType);
 
+			if (ImpactEffect)
+			{
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.ImpactPoint, Hit.ImpactNormal.Rotation());
+			}
+
 			if (bIsDebugging)
 			{
 				DrawDebugLine(GetWorld(), EyeLocation, Hit.ImpactPoint, FColor::White, false, 1.0f, 0.0f, 1.0f);
+			}
+		}
+
+		if (MuzzleEffect)
+		{
+			UGameplayStatics::SpawnEmitterAttached(MuzzleEffect, WeaponMesh, MuzzleSocketName);
+		}
+
+		/*
+		if (ShotSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), ShotSound, MuzzleLocation, ShotVolume);
+		}
+		*/
+
+		if (TracerEffect)
+		{
+			UParticleSystemComponent* TracerComponent = UGameplayStatics::SpawnEmitterAttached(TracerEffect, WeaponMesh, MuzzleSocketName);
+			if (TracerComponent)
+			{
+				TracerComponent->SetVectorParameter(TracerTargetName, Hit.ImpactPoint);
 			}
 		}
 

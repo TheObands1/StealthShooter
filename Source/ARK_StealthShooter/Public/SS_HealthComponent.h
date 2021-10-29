@@ -41,6 +41,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void TakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 
+	UFUNCTION(BlueprintCallable)
+	void KillAutomatically(AController* InstigatedBy, AActor* DamageCauser);
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

@@ -49,5 +49,17 @@ void USS_HealthComponent::TakeAnyDamage(AActor* DamagedActor, float Damage, cons
 	}
 }
 
+void USS_HealthComponent::KillAutomatically(AController* InstigatedBy, AActor* DamageCauser)
+{
+	if (bIsDead)
+	{
+		return;
+	}
+
+	CurrentHealth = 0.0f;
+	bIsDead = true;
+	OnDeathDelegate.Broadcast(this, InstigatedBy, DamageCauser);
+}
+
 
 

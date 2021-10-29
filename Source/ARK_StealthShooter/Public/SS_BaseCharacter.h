@@ -8,6 +8,7 @@
 
 class ASS_Weapon;
 class USS_HealthComponent;
+class UAnimMontage;
 
 UCLASS()
 class ARK_STEALTHSHOOTER_API ASS_BaseCharacter : public ACharacter
@@ -18,10 +19,29 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USS_HealthComponent* HealthComponent;
 
+protected:
+
+	UPROPERTY(BlueprintReadOnly, Category = "Melee")
+	bool bIsDoingMeleeAttack;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Melee")
+	float MeleeAttackRange;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animations")
+	UAnimMontage* MeleeAttackMontage;
+
+	UAnimInstance* MyAnimInstance;
+
 public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	FName WeaponSocketName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Melee")
+	FName MeleeSocketName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Melee")
+	TArray<TEnumAsByte<EObjectTypeQuery>> MeleeObjectTypes;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
 	TSubclassOf<ASS_Weapon> StartingWeaponClass;
@@ -48,5 +68,14 @@ protected:
 
 	UFUNCTION()
 	void OnDeath(USS_HealthComponent* MyHealthComponent, class AController* InstigatedBy, AActor* Killer);
+
+	UFUNCTION(BlueprintCallable)
+	void StartMelee();
+
+	UFUNCTION(BlueprintCallable)
+	void StopMelee(UAnimMontage* AnimMontageReference, bool bIsInterrumpted);
+
+	UFUNCTION(BlueprintCallable)
+	void DoMeleeAttack();
 
 };

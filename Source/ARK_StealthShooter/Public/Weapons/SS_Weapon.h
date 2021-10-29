@@ -7,6 +7,7 @@
 #include "SS_Weapon.generated.h"
 
 class UStaticMeshComponent;
+class UParticleSystem;
 
 UCLASS()
 class ARK_STEALTHSHOOTER_API ASS_Weapon : public AActor
@@ -20,6 +21,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* WeaponMesh;
+
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Settings", meta = (ClampMin = 0.1f))
@@ -40,6 +42,21 @@ protected:
 	TSubclassOf<UDamageType> DamageType;
 
 	FTimerHandle TimerHandle_AutoFire;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
+	UParticleSystem* MuzzleEffect;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
+	UParticleSystem* TracerEffect;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
+	UParticleSystem* ImpactEffect;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
+	FName MuzzleSocketName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
+	FName TracerTargetName;
 public:	
 	// Sets default values for this actor's properties
 	ASS_Weapon();

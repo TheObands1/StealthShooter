@@ -5,6 +5,8 @@
 #include "GameFramework/PawnMovementComponent.h"
 #include "Weapons/SS_Weapon.h"
 #include "SS_HealthComponent.h"
+#include "Animation/AnimInstance.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
 ASS_BaseCharacter::ASS_BaseCharacter()
@@ -52,6 +54,13 @@ void ASS_BaseCharacter::BeginPlay()
 		HealthComponent->OnHealthChangedDelegate.AddDynamic(this, &ASS_BaseCharacter::OnHealthChanged);
 		HealthComponent->OnDeathDelegate.AddDynamic(this, &ASS_BaseCharacter::OnDeath);
 	}
+
+	MyAnimInstance = GetMesh()->GetAnimInstance();
+
+	if (IsValid(MyAnimInstance))
+	{
+		MyAnimInstance->OnMontageEnded.AddDynamic(this, &ASS_BaseCharacter::StopMelee);
+	}
 }
 
 void ASS_BaseCharacter::OnHealthChanged(USS_HealthComponent* MyHealthComponent, float Health, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
@@ -63,6 +72,54 @@ void ASS_BaseCharacter::OnDeath(USS_HealthComponent* MyHealthComponent, AControl
 	StopFire();
 	GetMovementComponent()->StopMovementImmediately();
 	this->SetActorEnableCollision(false);
+}
+
+void ASS_BaseCharacter::StartMelee()
+{
+	if (bIsDoingMeleeAttack)
+	{
+		return;
+	}
+
+	if (IsValid(MyAnimInstance) && IsValid(MeleeAttackMontage))
+	{
+		GetMovementComponent()->StopMovementImmediately();
+		MyAnimInstance->Montage_Play(MeleeAttackMontage);
+		bIsDoingMeleeAttack = true;
+	}
+}
+
+void ASS_BaseCharacter::StopMelee(UAnimMontage* AnimMontageReference, bool bIsInterrumpted)
+{
+	if (AnimMontageReference == MeleeAttackMontage)
+	{
+		bIsDoingMeleeAttack = false;
+	}
+}
+
+void ASS_BaseCharacter::DoMeleeAttack()
+{
+	const FVector MeleeAttackLocation = GetMesh()->GetSocketLocation(MeleeSocketName);
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(this);
+	
+	TArray<AActor*> DamagedActors;
+
+	bool bHasAnActorBeenHit = UKismetSystemLibrary::SphereOverlapActors(GetWorld(), MeleeAttackLocation, MeleeAttackRange, MeleeObjectTypes, AActor::StaticClass(), ActorsToIgnore, DamagedActors);
+	
+	if (bHasAnActorBeenHit)
+	{
+		AActor* HitActor = DamagedActors[0];
+		if (IsValid(HitActor))
+		{
+			USS_HealthComponent* HitActorHealthComponent = Cast<USS_HealthComponent>(HitActor->GetComponentByClass(USS_HealthComponent::StaticClass()));
+
+			if (IsValid(HitActorHealthComponent))
+			{
+				HitActorHealthComponent->KillAutomatically(GetController(), this);
+			}
+		}
+	}
 }
 
 
