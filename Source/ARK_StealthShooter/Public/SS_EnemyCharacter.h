@@ -10,6 +10,15 @@
  * 
  */
 
+UENUM(BlueprintType)
+enum class ESS_EnemyStatus : uint8
+{
+	EnemyStatus_Patrol = 0				UMETA(DisplayName = "Patrol"),
+	EnemyStatus_Investigating = 1		UMETA(DisplayName = "Investigating"),
+	EnemyStatus_Combat = 2				UMETA(DisplayName = "Combat")
+};
+
+
 class ASS_PatrolActor;
 
 UCLASS()
@@ -20,5 +29,17 @@ class ARK_STEALTHSHOOTER_API ASS_EnemyCharacter : public ASS_BaseCharacter
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Settings")
 	ASS_PatrolActor* PatrolActorReference;
+
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
+	TMap<ESS_EnemyStatus, float> EnemySpeedMap;
+
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_SetEnemyStatus(ESS_EnemyStatus NewEnemyStatus);
+
+protected:
+	UFUNCTION(BlueprintCallable)
+	void SetEnemyStatus(ESS_EnemyStatus NewEnemyStatus);
 	
 };

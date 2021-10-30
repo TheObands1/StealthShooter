@@ -2,4 +2,12 @@
 
 
 #include "SS_EnemyCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
+void ASS_EnemyCharacter::SetEnemyStatus(ESS_EnemyStatus NewEnemyStatus)
+{
+	BP_SetEnemyStatus(NewEnemyStatus);
+
+	float NewSpeed = EnemySpeedMap[NewEnemyStatus];
+	GetCharacterMovement()->MaxWalkSpeed = NewSpeed;
+}
