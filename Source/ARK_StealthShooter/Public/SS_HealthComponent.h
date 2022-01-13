@@ -8,6 +8,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FOnHealthChangedSignature, USS_HealthComponent*, HealthComponent, float, Health, float, Damage, const class UDamageType*, DamageType, class AController*, InstigatedBy, AActor*, DamageCauser);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnDeathSignature, USS_HealthComponent*, HealthComponent, class AController*, InstigatedBy, AActor*, Killer);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthUpdateSignature, float, CurrentHealth, float, MaxHealth);
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -20,11 +21,16 @@ protected:
 	UPROPERTY(BlueprintReadWrite, Category = "Settings")
 	bool bIsDead;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings", meta = (ClampMin = 0.1f))
 	float DefaultHealth;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Settings")
 	float CurrentHealth;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
+	uint8 TeamNumber;
+
+	FTimerHandle TimerHandler_UpdateInitialHealth;
 
 public:
 	UPROPERTY(BlueprintAssignable)
@@ -32,6 +38,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnDeathSignature OnDeathDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnHealthUpdateSignature OnHealthUpdateDelegate;
 
 
 public:	
@@ -43,6 +52,16 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void KillAutomatically(AController* InstigatedBy, AActor* DamageCauser);
+
+	UFUNCTION()
+	void Heal(const float HealthAmount);
+
+	UFUNCTION()
+	void UpdateHealth();
+
+	bool bIsActorDead() { return bIsDead; };
+
+	static bool IsFriendly(const AActor* ActorA, const AActor* ActorB);
 
 protected:
 	// Called when the game starts
