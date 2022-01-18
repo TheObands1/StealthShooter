@@ -9,6 +9,7 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class UPawnNoiseEmitterComponent;
 
 /**
  * 
@@ -41,4 +42,5 @@ protected:
 	void StartCrouch();
 
 	void EndCrouch();
+
 };

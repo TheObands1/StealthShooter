@@ -49,6 +49,7 @@ void ASS_HealingArea::Heal(ASS_BaseCharacter* CharacterToHeal)
 		CharacterHealthComponent->Heal(HealingAmount);
 	}
 
+	BP_Heal();
 	bIsActive = false;
 	AreaMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	AreaMeshComponent->SetVisibility(false);
@@ -60,5 +61,6 @@ void ASS_HealingArea::ResetHealingArea()
 	bIsActive = true;
 	AreaMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	AreaMeshComponent->SetVisibility(true);
+	BP_ResetHealingArea();
 }
 

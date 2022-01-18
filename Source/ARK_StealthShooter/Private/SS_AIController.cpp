@@ -9,3 +9,8 @@ ETeamAttitude::Type ASS_AIController::GetTeamAttitudeTowards(const AActor& Other
     const AActor* OtherActor = &Other;
     return (USS_HealthComponent::IsFriendly(GetPawn(), OtherActor)) ? ETeamAttitude::Friendly : ETeamAttitude::Hostile;
 }
+
+ASS_AIController::ASS_AIController()
+{
+    SetGenericTeamId(FGenericTeamId(1));
+}

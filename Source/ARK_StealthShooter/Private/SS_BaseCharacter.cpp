@@ -7,7 +7,8 @@
 #include "SS_HealthComponent.h"
 #include "Animation/AnimInstance.h"
 #include "Kismet/KismetSystemLibrary.h"
-
+#include "Core/SS_GameMode.h"
+#include "Components/PawnNoiseEmitterComponent.h"
 // Sets default values
 ASS_BaseCharacter::ASS_BaseCharacter()
 {
@@ -17,6 +18,9 @@ ASS_BaseCharacter::ASS_BaseCharacter()
 
 	HealthComponent = CreateDefaultSubobject<USS_HealthComponent>(TEXT("HealthComponent"));
 
+	CharacterNoiseEmmiter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("CharacterNoiseEmmiter"));
+
+	CharacterNoiseEmmiter->SetAutoActivate(true);
 }
 
 void ASS_BaseCharacter::StartFire()
@@ -61,6 +65,8 @@ void ASS_BaseCharacter::BeginPlay()
 	{
 		MyAnimInstance->OnMontageEnded.AddDynamic(this, &ASS_BaseCharacter::StopMelee);
 	}
+
+	GameModeReference = Cast<ASS_GameMode>(GetWorld()->GetAuthGameMode());
 }
 
 void ASS_BaseCharacter::OnHealthChanged(USS_HealthComponent* MyHealthComponent, float Health, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
@@ -119,6 +125,14 @@ void ASS_BaseCharacter::DoMeleeAttack()
 				HitActorHealthComponent->KillAutomatically(GetController(), this);
 			}
 		}
+	}
+}
+
+void ASS_BaseCharacter::CharacterMakeNoise(const float Loudness, const FVector NoiseLocation)
+{
+	if (IsValid(CharacterNoiseEmmiter))
+	{
+		CharacterNoiseEmmiter->MakeNoise(this, Loudness, NoiseLocation);
 	}
 }
 

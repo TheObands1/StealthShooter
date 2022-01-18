@@ -8,6 +8,9 @@
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Sound/SoundBase.h"
+#include "SS_BaseCharacter.h"
+#include "Sound/SoundCue.h"
 
 // Sets default values
 ASS_Weapon::ASS_Weapon()
@@ -21,6 +24,8 @@ ASS_Weapon::ASS_Weapon()
 
 	ShotDistance = 10000.0f;
 	ShotDamage = 20.0f;
+	ShotVolume = 1.0f;
+	ShotLoudness = 0.1f;
 
 	bIsDebugging = false;
 	RoundsPerMinute = 300;
@@ -73,6 +78,8 @@ void ASS_Weapon::Fire()
 		QueryParams.AddIgnoredActor(this);
 		QueryParams.bTraceComplex = true;
 
+		FVector MuzzleLocation = WeaponMesh->GetSocketLocation(MuzzleSocketName);
+
 		FHitResult Hit;
 
 		bool bDidLineTraceHit = GetWorld()->LineTraceSingleByChannel(Hit, EyeLocation, TraceEnd, ECC_GameTraceChannel1, QueryParams);
@@ -99,22 +106,30 @@ void ASS_Weapon::Fire()
 			UGameplayStatics::SpawnEmitterAttached(MuzzleEffect, WeaponMesh, MuzzleSocketName);
 		}
 
-		/*
-		if (ShotSound)
+		
+		if (ShotSoundCue)
 		{
-			UGameplayStatics::PlaySoundAtLocation(GetWorld(), ShotSound, MuzzleLocation, ShotVolume);
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), ShotSoundCue, MuzzleLocation, ShotVolume);
 		}
-		*/
-
+		
+		BP_DebugHit(Hit);
 		if (TracerEffect)
 		{
 			UParticleSystemComponent* TracerComponent = UGameplayStatics::SpawnEmitterAttached(TracerEffect, WeaponMesh, MuzzleSocketName);
 			if (TracerComponent)
 			{
-				TracerComponent->SetVectorParameter(TracerTargetName, Hit.ImpactPoint);
+				TracerComponent->SetVectorParameter(TracerTargetName, TraceEnd);
+		
 			}
 		}
 
+		ASS_BaseCharacter* OwnerBaseCharacter = Cast<ASS_BaseCharacter>(MyOwner);
+
+		if (IsValid(OwnerBaseCharacter))
+		{
+			OwnerBaseCharacter->CharacterMakeNoise(ShotLoudness, MuzzleLocation);
+		}
+		
 	}
 	LastFireTime = GetWorld()->TimeSeconds;
 }

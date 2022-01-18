@@ -5,6 +5,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
+
 ASS_PlayerCharacter::ASS_PlayerCharacter()
 {
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
@@ -31,6 +32,7 @@ void ASS_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 	PlayerInputComponent->BindAction("Melee", IE_Pressed, this, &ASS_PlayerCharacter::StartMelee);
 
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASS_PlayerCharacter::Jump);
 }
 
 FVector ASS_PlayerCharacter::GetPawnViewLocation() const
@@ -64,3 +66,4 @@ void ASS_PlayerCharacter::EndCrouch()
 {
 	UnCrouch();
 }
+

@@ -28,7 +28,7 @@ protected:
 	FTimerHandle TimerHandle_Cooldown;
 
 public:
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	uint8 bIsActive;
 	
 public:	
@@ -45,7 +45,13 @@ protected:
 	UFUNCTION()
 	void Heal(ASS_BaseCharacter* CharacterToHeal);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_Heal();
+
 	UFUNCTION()
 	void ResetHealingArea();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_ResetHealingArea();
 
 };

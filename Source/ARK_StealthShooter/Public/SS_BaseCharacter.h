@@ -9,6 +9,8 @@
 class ASS_Weapon;
 class USS_HealthComponent;
 class UAnimMontage;
+class ASS_GameMode;
+class UPawnNoiseEmitterComponent;
 
 UCLASS()
 class ARK_STEALTHSHOOTER_API ASS_BaseCharacter : public ACharacter
@@ -18,6 +20,9 @@ class ARK_STEALTHSHOOTER_API ASS_BaseCharacter : public ACharacter
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USS_HealthComponent* HealthComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UPawnNoiseEmitterComponent* CharacterNoiseEmmiter;
 
 protected:
 
@@ -31,6 +36,8 @@ protected:
 	UAnimMontage* MeleeAttackMontage;
 
 	UAnimInstance* MyAnimInstance;
+
+	ASS_GameMode* GameModeReference;
 
 public:
 
@@ -62,6 +69,9 @@ public:
 	UFUNCTION()
 	USS_HealthComponent* GetHealthComponent() { return HealthComponent; };
 
+	UFUNCTION()
+	void CharacterMakeNoise(const float Loudness, const FVector NoiseLocation);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -70,7 +80,7 @@ protected:
 	virtual void OnHealthChanged(USS_HealthComponent* MyHealthComponent, float Health, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 
 	UFUNCTION()
-	void OnDeath(USS_HealthComponent* MyHealthComponent, class AController* InstigatedBy, AActor* Killer);
+	virtual void OnDeath(USS_HealthComponent* MyHealthComponent, class AController* InstigatedBy, AActor* Killer);
 
 	UFUNCTION(BlueprintCallable)
 	void StartMelee();
@@ -80,5 +90,6 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void DoMeleeAttack();
+
 
 };

@@ -53,7 +53,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void KillAutomatically(AController* InstigatedBy, AActor* DamageCauser);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void Heal(const float HealthAmount);
 
 	UFUNCTION()

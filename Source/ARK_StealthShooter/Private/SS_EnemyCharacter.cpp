@@ -6,6 +6,7 @@
 #include "Components/WidgetComponent.h"
 #include "SS_HealthComponent.h"
 #include "UI/Enemy/SS_HealthBarEnemy.h"
+#include "Core/SS_GameMode.h"
 
 ASS_EnemyCharacter::ASS_EnemyCharacter()
 {
@@ -28,6 +29,11 @@ void ASS_EnemyCharacter::BeginPlay()
 			GetHealthComponent()->OnHealthUpdateDelegate.AddDynamic(EnemyHealthBarReference, &USS_HealthBarEnemy::UpdateHealth);
 			HideHealthBar();
 		}
+	}
+
+	if (GameModeReference)
+	{
+
 	}
 }
 
@@ -81,5 +87,14 @@ void ASS_EnemyCharacter::OnHealthChanged(USS_HealthComponent* MyHealthComponent,
 			GetWorld()->GetTimerManager().SetTimer(TimerHandle_HideHealthBar, this, &ASS_EnemyCharacter::HideHealthBar, TimeToDelayHidingOfHealthBar, false);
 		}
 
+	}
+}
+
+void ASS_EnemyCharacter::OnDeath(USS_HealthComponent* MyHealthComponent, AController* InstigatedBy, AActor* Killer)
+{
+	Super::OnDeath(MyHealthComponent, InstigatedBy, Killer);
+	if (GameModeReference)
+	{
+		GameModeReference->ReduceEnemyCounter(this);
 	}
 }

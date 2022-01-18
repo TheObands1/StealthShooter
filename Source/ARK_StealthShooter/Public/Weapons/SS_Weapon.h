@@ -8,6 +8,8 @@
 
 class UStaticMeshComponent;
 class UParticleSystem;
+class USoundBase;
+class USoundCue;
 
 UCLASS()
 class ARK_STEALTHSHOOTER_API ASS_Weapon : public AActor
@@ -16,14 +18,15 @@ class ARK_STEALTHSHOOTER_API ASS_Weapon : public AActor
 
 protected:
 
-	UPROPERTY(EditDefaultsOnly)
-	bool bIsDebugging;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* WeaponMesh;
 
 
 protected:
+
+	UPROPERTY(EditDefaultsOnly)
+	bool bIsDebugging;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Settings", meta = (ClampMin = 0.1f))
 	float ShotDistance;
 
@@ -36,7 +39,19 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Settings", meta = (ClampMin = 0.1f))
 	float TimeBetweenShots;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Settings", meta = (ClampMin = 0.0f))
+	float ShotLoudness;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Settings", meta = (ClampMin = 0.0f))
+	float ShotVolume;
+
 	float LastFireTime;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound")
+	USoundBase* ShotSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound")
+	USoundCue* ShotSoundCue;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageType> DamageType;
@@ -74,5 +89,9 @@ public:
 	void StopFire();
 
 	void Fire();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_DebugHit(FHitResult AHitResult);
+
 
 };

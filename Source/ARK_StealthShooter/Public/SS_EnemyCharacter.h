@@ -70,4 +70,6 @@ protected:
 	void SetEnemyStatus(ESS_EnemyStatus NewEnemyStatus);
 
 	virtual void OnHealthChanged(USS_HealthComponent* MyHealthComponent, float Health, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser) override;
+
+	virtual void OnDeath(USS_HealthComponent* MyHealthComponent, class AController* InstigatedBy, AActor* Killer) override;
 };
