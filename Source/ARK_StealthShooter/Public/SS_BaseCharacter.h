@@ -85,6 +85,12 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void StartMelee();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_StartMelee();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_StopMelee();
+
 	UFUNCTION(BlueprintCallable)
 	void StopMelee(UAnimMontage* AnimMontageReference, bool bIsInterrumpted);
 

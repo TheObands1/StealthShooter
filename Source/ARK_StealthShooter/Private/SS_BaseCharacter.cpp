@@ -91,6 +91,7 @@ void ASS_BaseCharacter::StartMelee()
 	{
 		GetMovementComponent()->StopMovementImmediately();
 		MyAnimInstance->Montage_Play(MeleeAttackMontage);
+		BP_StartMelee();
 		bIsDoingMeleeAttack = true;
 	}
 }
@@ -99,6 +100,7 @@ void ASS_BaseCharacter::StopMelee(UAnimMontage* AnimMontageReference, bool bIsIn
 {
 	if (AnimMontageReference == MeleeAttackMontage)
 	{
+		BP_StopMelee();
 		bIsDoingMeleeAttack = false;
 	}
 }

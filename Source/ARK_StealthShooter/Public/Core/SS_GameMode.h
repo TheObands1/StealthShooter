@@ -49,6 +49,7 @@ protected:
 
 	void UpdateEnemyCounter();
 
+	UFUNCTION(BlueprintCallable)
 	void GameOver();
 
 	void Win();

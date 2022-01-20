@@ -52,6 +52,7 @@ void ASS_GameMode::UpdateEnemyCounter()
 
 void ASS_GameMode::GameOver()
 {
+	BP_GameOver();
 	OnGameOverDelegate.Broadcast();
 }
 
