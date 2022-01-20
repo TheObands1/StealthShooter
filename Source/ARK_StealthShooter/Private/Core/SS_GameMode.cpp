@@ -39,6 +39,7 @@ void ASS_GameMode::ReduceEnemyCounter(ASS_EnemyCharacter* EnemyToRemove)
 
 	if (EnemiesInLevel.Num() == 0)
 	{
+		OnWinDelegate.Broadcast();
 		Win();
 	}
 
@@ -56,6 +57,5 @@ void ASS_GameMode::GameOver()
 
 void ASS_GameMode::Win()
 {
-	OnWinDelegate.Broadcast();
 	BP_Win();
 }

@@ -52,6 +52,7 @@ protected:
 	void GameOver();
 
 	void Win();
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_GameOver();
 
