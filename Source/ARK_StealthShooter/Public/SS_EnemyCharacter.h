@@ -23,6 +23,7 @@ class ASS_PatrolActor;
 class UWidgetComponent;
 class USS_HealthBarEnemy;
 class USS_HealthComponent;
+class ASS_AIController;
 
 UCLASS()
 class ARK_STEALTHSHOOTER_API ASS_EnemyCharacter : public ASS_BaseCharacter
@@ -47,6 +48,8 @@ protected:
 	USS_HealthBarEnemy* EnemyHealthBarReference;
 	
 	FTimerHandle TimerHandle_HideHealthBar;
+
+	ASS_AIController* MyAIControllerReference;
 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")

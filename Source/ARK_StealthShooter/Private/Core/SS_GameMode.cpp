@@ -56,5 +56,6 @@ void ASS_GameMode::GameOver()
 
 void ASS_GameMode::Win()
 {
+	OnWinDelegate.Broadcast();
 	BP_Win();
 }

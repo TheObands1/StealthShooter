@@ -7,6 +7,7 @@
 #include "SS_HealthComponent.h"
 #include "UI/Enemy/SS_HealthBarEnemy.h"
 #include "Core/SS_GameMode.h"
+#include "SS_AIController.h"
 
 ASS_EnemyCharacter::ASS_EnemyCharacter()
 {
@@ -31,10 +32,7 @@ void ASS_EnemyCharacter::BeginPlay()
 		}
 	}
 
-	if (GameModeReference)
-	{
-
-	}
+	MyAIControllerReference = Cast<ASS_AIController>(GetController());
 }
 
 void ASS_EnemyCharacter::HideHealthBar()
@@ -97,4 +95,13 @@ void ASS_EnemyCharacter::OnDeath(USS_HealthComponent* MyHealthComponent, AContro
 	{
 		GameModeReference->ReduceEnemyCounter(this);
 	}
+
+	/*
+	if (IsValid(MyAIControllerReference))
+	{
+		MyAIControllerReference->DeactivateAIPerception();
+		MyAIControllerReference->UnPossess();
+		MyAIControllerReference->Destroy();
+	}
+	*/
 }
