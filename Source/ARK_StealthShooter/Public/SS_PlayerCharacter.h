@@ -43,4 +43,6 @@ protected:
 
 	void EndCrouch();
 
+	virtual void Jump() override;
+
 };

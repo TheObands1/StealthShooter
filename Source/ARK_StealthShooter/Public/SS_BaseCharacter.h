@@ -11,6 +11,8 @@ class USS_HealthComponent;
 class UAnimMontage;
 class ASS_GameMode;
 class UPawnNoiseEmitterComponent;
+class UAudioComponent;
+class USoundCue;
 
 UCLASS()
 class ARK_STEALTHSHOOTER_API ASS_BaseCharacter : public ACharacter
@@ -24,6 +26,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UPawnNoiseEmitterComponent* CharacterNoiseEmmiter;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UAudioComponent* VoiceSoundComponent;
+
 protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Melee")
@@ -36,6 +41,15 @@ protected:
 	UAnimMontage* MeleeAttackMontage;
 
 	UAnimInstance* MyAnimInstance;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound")
+	USoundCue* HurtSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound")
+	USoundCue* JumpSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound")
+	USoundCue* MeleeSound;
 
 	ASS_GameMode* GameModeReference;
 
@@ -96,6 +110,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void DoMeleeAttack();
+
+	UFUNCTION(BlueprintCallable)
+	void PlayVoiceSound(USoundCue* VoiceSound);
 
 
 };

@@ -67,3 +67,9 @@ void ASS_PlayerCharacter::EndCrouch()
 	UnCrouch();
 }
 
+void ASS_PlayerCharacter::Jump()
+{
+	Super::Jump();
+	PlayVoiceSound(JumpSound);
+}
+

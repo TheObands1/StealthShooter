@@ -3,6 +3,7 @@
 
 #include "SS_AIController.h"
 #include "SS_HealthComponent.h"
+#include "Navigation/CrowdFollowingComponent.h"
 
 ETeamAttitude::Type ASS_AIController::GetTeamAttitudeTowards(const AActor& Other) const
 {
@@ -10,7 +11,7 @@ ETeamAttitude::Type ASS_AIController::GetTeamAttitudeTowards(const AActor& Other
     return (USS_HealthComponent::IsFriendly(GetPawn(), OtherActor)) ? ETeamAttitude::Friendly : ETeamAttitude::Hostile;
 }
 
-ASS_AIController::ASS_AIController()
+ASS_AIController::ASS_AIController(const FObjectInitializer& ObjectInitializer):Super(ObjectInitializer.SetDefaultSubobjectClass<UCrowdFollowingComponent>(TEXT("“PathFollowingComponent")))
 {
     SetGenericTeamId(FGenericTeamId(1));
 }

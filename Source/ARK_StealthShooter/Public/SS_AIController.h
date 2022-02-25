@@ -17,6 +17,6 @@ class ARK_STEALTHSHOOTER_API ASS_AIController : public AAIController
 	ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
 
 public:
-	ASS_AIController();
+	ASS_AIController(const FObjectInitializer& ObjectInitializer);
 	
 };

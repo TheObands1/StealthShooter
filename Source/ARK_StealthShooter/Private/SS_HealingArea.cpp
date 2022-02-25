@@ -46,14 +46,17 @@ void ASS_HealingArea::Heal(ASS_BaseCharacter* CharacterToHeal)
 
 	if (CharacterHealthComponent)
 	{
-		CharacterHealthComponent->Heal(HealingAmount);
+		if (CharacterHealthComponent->GetMaxHealth() != CharacterHealthComponent->GetCurrentHealth())
+		{
+			CharacterHealthComponent->Heal(HealingAmount);
+			BP_Heal();
+			bIsActive = false;
+			AreaMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			AreaMeshComponent->SetVisibility(false);
+			GetWorldTimerManager().SetTimer(TimerHandle_Cooldown, this, &ASS_HealingArea::ResetHealingArea, CooldownTime);
+		}
+		
 	}
-
-	BP_Heal();
-	bIsActive = false;
-	AreaMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	AreaMeshComponent->SetVisibility(false);
-	GetWorldTimerManager().SetTimer(TimerHandle_Cooldown, this, &ASS_HealingArea::ResetHealingArea, CooldownTime);
 }
 
 void ASS_HealingArea::ResetHealingArea()

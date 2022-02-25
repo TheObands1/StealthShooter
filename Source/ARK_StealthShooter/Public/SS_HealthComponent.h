@@ -61,6 +61,10 @@ public:
 
 	bool bIsActorDead() { return bIsDead; };
 
+	float GetMaxHealth() { return DefaultHealth; };
+
+	float GetCurrentHealth() { return CurrentHealth; };
+
 	static bool IsFriendly(const AActor* ActorA, const AActor* ActorB);
 
 protected:

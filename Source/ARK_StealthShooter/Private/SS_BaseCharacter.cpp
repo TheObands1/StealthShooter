@@ -9,6 +9,8 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Core/SS_GameMode.h"
 #include "Components/PawnNoiseEmitterComponent.h"
+#include "Components/AudioComponent.h"
+#include "Sound/SoundCue.h"
 // Sets default values
 ASS_BaseCharacter::ASS_BaseCharacter()
 {
@@ -21,6 +23,11 @@ ASS_BaseCharacter::ASS_BaseCharacter()
 	CharacterNoiseEmmiter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("CharacterNoiseEmmiter"));
 
 	CharacterNoiseEmmiter->SetAutoActivate(true);
+
+	VoiceSoundComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("VoiceSoundComponent"));
+	VoiceSoundComponent->SetupAttachment(RootComponent);
+
+
 }
 
 void ASS_BaseCharacter::StartFire()
@@ -71,6 +78,7 @@ void ASS_BaseCharacter::BeginPlay()
 
 void ASS_BaseCharacter::OnHealthChanged(USS_HealthComponent* MyHealthComponent, float Health, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
+	PlayVoiceSound(HurtSound);
 }
 
 void ASS_BaseCharacter::OnDeath(USS_HealthComponent* MyHealthComponent, AController* InstigatedBy, AActor* Killer)
@@ -93,6 +101,7 @@ void ASS_BaseCharacter::StartMelee()
 		MyAnimInstance->Montage_Play(MeleeAttackMontage);
 		BP_StartMelee();
 		bIsDoingMeleeAttack = true;
+		PlayVoiceSound(MeleeSound);
 	}
 }
 
@@ -128,6 +137,17 @@ void ASS_BaseCharacter::DoMeleeAttack()
 			}
 		}
 	}
+}
+
+void ASS_BaseCharacter::PlayVoiceSound(USoundCue* VoiceSound)
+{
+	if (!IsValid(VoiceSound))
+	{
+		return;
+	}
+
+	VoiceSoundComponent->SetSound(VoiceSound);
+	VoiceSoundComponent->Play();
 }
 
 void ASS_BaseCharacter::CharacterMakeNoise(const float Loudness, const FVector NoiseLocation)
